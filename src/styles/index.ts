@@ -12,5 +12,4 @@ export const defaultStyles = StyleSheet.create({
 	},
 })
 
-
-export cont utilsStyles = StyleSheet.create({})
+export const utilsStyles = StyleSheet.create({})
