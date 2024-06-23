@@ -14,16 +14,3 @@ export const StackScreenWithSearchBar: NativeStackNavigationOptions = {
 	headerBlurEffect: 'prominent',
 	headerShadowVisible: false,
 }
-export const StackScreenWithoutSearchBar: NativeStackNavigationOptions = {
-	headerTitle: '',
-	headerTransparent: true,
-	headerBackground: () => null,
-	headerBackTitleVisible: false,
-	headerBackTitle: 'Back',
-	headerBackTitleStyle: { color: 'white' },
-	headerTintColor: 'white',
-	headerTitleStyle: { color: 'white' },
-	headerStyle: {
-		backgroundColor: 'transparent',
-	},
-}
