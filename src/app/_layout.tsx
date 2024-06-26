@@ -13,12 +13,12 @@ const App = () => {
 	)
 }
 
-const RootNavigation = () => {
-	return (
-		<Stack>
-			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-		</Stack>
-	)
-}
+// const RootNavigation = () => {
+// 	return (
+// 		<Stack>
+// 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+// 		</Stack>
+// 	)
+// }
 
 export default App
