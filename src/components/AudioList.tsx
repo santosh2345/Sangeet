@@ -64,10 +64,14 @@ export default function AudioList() {
 	return (
 		<View style={styles.container}>
 			<StatusBar style="auto" />
-			<Text style={styles.heading}>Welcome to GeeksforGeeks</Text>
 			<View style={styles.list}>
 				{musicFiles.map((file, index) => (
-					<View key={index}>
+					<View
+						key={index}
+						style={{
+							overflow: 'scroll',
+						}}
+					>
 						<TouchableOpacity
 							onPress={
 								playing !== index
@@ -136,8 +140,8 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	playButton: {
-		backgroundColor: 'gray',
-		borderRadius: 50,
+		backgroundColor: 'darkgreen',
+		borderRadius: 8,
 		padding: 10,
 		margin: 10,
 	},
