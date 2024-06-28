@@ -4,7 +4,7 @@ import MusicScreen from '.'
 const App = () => {
 	return (
 		<SafeAreaProvider>
-			<RootNavigation />
+			{/* <RootNavigation /> */}
 
 			<MusicScreen />
 

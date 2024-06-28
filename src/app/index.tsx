@@ -1,3 +1,4 @@
+import AudioList from '@/components/AudioList'
 import { defaultStyles } from '@/styles'
 import { Text, View } from 'react-native'
 
@@ -9,7 +10,7 @@ export default function MusicScreen() {
 					fontSize: 20,
 					fontWeight: 'bold',
 					color: 'white',
-					marginTop: 20,
+					marginTop: 30,
 				}}
 			>
 				Music Screen
@@ -24,6 +25,7 @@ export default function MusicScreen() {
 			>
 				Music Screen
 			</Text>
+			<AudioList />
 
 			{/* ... other Text components ... */}
 		</View>
