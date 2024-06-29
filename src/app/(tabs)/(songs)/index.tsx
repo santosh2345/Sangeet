@@ -45,6 +45,7 @@ const styles = {
 	fileName: {
 		fontSize: 14,
 		fontWeight: 'bold',
+		marginTop: 10,
 		color: 'white',
 	},
 }
