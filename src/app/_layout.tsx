@@ -1,24 +1,25 @@
+import { Stack } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import MusicScreen from '.'
 
 const App = () => {
 	return (
 		<SafeAreaProvider>
-			{/* <RootNavigation /> */}
+			<RootNavigation />
 
-			<MusicScreen />
+			{/* <MusicScreen /> */}
 
-			{/* <StatusBar style="auto" /> */}
+			<StatusBar style="auto" />
 		</SafeAreaProvider>
 	)
 }
 
-// const RootNavigation = () => {
-// 	return (
-// 		<Stack>
-// 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-// 		</Stack>
-// 	)
-// }
+const RootNavigation = () => {
+	return (
+		<Stack>
+			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+		</Stack>
+	)
+}
 
 export default App

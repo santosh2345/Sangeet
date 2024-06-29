@@ -1,18 +1,10 @@
-// App.tsx
-
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { AVPlaybackStatus, Audio } from 'expo-av'
+import { Audio } from 'expo-av'
 import * as MediaLibrary from 'expo-media-library'
 import { StatusBar } from 'expo-status-bar'
-import { memo, useCallback, useEffect, useState } from 'react'
-import {
-	FlatList,
-	ListRenderItemInfo,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native'
+import { memo, useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import fetchMusicFiles from './getSongs'
 
 interface MusicFile {
 	id: string
@@ -60,98 +52,88 @@ export default function App() {
 	const [progressDuration, setProgressDuration] = useState<number>(0)
 	const [hasPermission, setHasPermission] = useState<boolean>(false)
 
-	const fetchMusicFiles = async () => {
-		if (!hasPermission) {
-			return
-		}
+	// const playMusic = async (fileUri: string) => {
+	// 	if (sound) {
+	// 		await sound.unloadAsync()
+	// 	}
 
-		const media = await MediaLibrary.getAssetsAsync({
-			mediaType: MediaLibrary.MediaType.audio,
-			first: 1000, // Adjust this as needed to fetch all audio files
-		})
+	// 	const { sound: newSound } = await Audio.Sound.createAsync({ uri: fileUri })
+	// 	setSound(newSound)
+	// 	await newSound.playAsync()
+	// }
 
-		setMusicFiles(media.assets as MusicFile[])
-	}
-
-	const playMusic = async (fileUri: string) => {
-		if (sound) {
-			await sound.unloadAsync()
-		}
-
-		const { sound: newSound } = await Audio.Sound.createAsync({ uri: fileUri })
-		setSound(newSound)
-		await newSound.playAsync()
-	}
-
-	const pauseMusic = async () => {
-		if (sound) {
-			await sound.pauseAsync()
-		}
-	}
+	// const pauseMusic = async () => {
+	// 	if (sound) {
+	// 		await sound.pauseAsync()
+	// 	}
+	// }
 
 	useEffect(() => {
 		;(async () => {
 			const permission = await MediaLibrary.requestPermissionsAsync()
 			if (permission.status === 'granted') {
 				setHasPermission(true)
-				fetchMusicFiles()
+				const songs = await fetchMusicFiles(hasPermission)
+				setMusicFiles(songs)
 			}
 		})()
-	}, [])
+	}, [hasPermission])
 
-	useEffect(() => {
-		if (!sound) return
+	// useEffect(() => {
+	// 	if (!sound) return
 
-		sound.setOnPlaybackStatusUpdate((status: AVPlaybackStatus) => {
-			if (status.isLoaded) {
-				if (status.didJustFinish) {
-					setPlaying(-1)
-					sound.unloadAsync()
-					setSound(null)
-				} else {
-					setProgressDuration(status.positionMillis / 1000)
-				}
-			}
-		})
-	}, [sound])
+	// 	sound.setOnPlaybackStatusUpdate((status: AVPlaybackStatus) => {
+	// 		if (status.isLoaded) {
+	// 			if (status.didJustFinish) {
+	// 				setPlaying(-1)
+	// 				sound.unloadAsync()
+	// 				setSound(null)
+	// 			} else {
+	// 				setProgressDuration(status.positionMillis / 1000)
+	// 			}
+	// 		}
+	// 	})
+	// }, [sound])
 
-	const renderItem = useCallback(
-		({ item, index }: ListRenderItemInfo<MusicFile>) => {
-			const isPlaying = playing === index
-			const onPress = isPlaying
-				? () => {
-						pauseMusic()
-						setPlaying(-1)
-					}
-				: () => {
-						playMusic(item.uri)
-						setPlaying(index)
-					}
+	// const renderItem = useCallback(
+	// 	({ item, index }: ListRenderItemInfo<MusicFile>) => {
+	// 		const isPlaying = playing === index
+	// 		const onPress = isPlaying
+	// 			? () => {
+	// 					pauseMusic()
+	// 					setPlaying(-1)
+	// 				}
+	// 			: () => {
+	// 					playMusic(item.uri)
+	// 					setPlaying(index)
+	// 				}
 
-			return (
-				<MusicItem
-					item={item}
-					isPlaying={isPlaying}
-					onPress={onPress}
-					progressDuration={progressDuration}
-				/>
-			)
-		},
-		[playing, progressDuration],
-	)
+	// 		return (
+	// 			<MusicItem
+	// 				item={item}
+	// 				isPlaying={isPlaying}
+	// 				onPress={onPress}
+	// 				progressDuration={progressDuration}
+	// 			/>
+	// 		)
+	// 	},
+	// 	[playing, progressDuration],
+	// )
 
 	return (
 		<View style={styles.container}>
+			<Text style={styles.heading}>Audio List</Text>
 			<StatusBar style="auto" />
-			<FlatList
+			{musicFiles?.map((item, index) => <Text key={index}>{item.filename}</Text>)}
+			{/* <FlatList
 				data={musicFiles}
 				keyExtractor={(item) => item.id}
 				renderItem={renderItem}
 				onEndReachedThreshold={0.5}
-				initialNumToRender={10}
-				maxToRenderPerBatch={10}
+				initialNumToRender={50}
+				maxToRenderPerBatch={50}
 				windowSize={21}
-			/>
+			/> */}
 		</View>
 	)
 }
