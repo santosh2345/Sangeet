@@ -1,51 +1,90 @@
-import fetchMusicFiles from '@/components/getSongs'
+// src/screens/SongsScreen.tsx
 import { defaultStyles } from '@/styles'
+import { MusicFile } from '@/types/MusicFile'
+import { fetchMusicFiles } from '@/utils/FetchMusicFiles'
 import * as MediaLibrary from 'expo-media-library'
-import { useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { ActivityIndicator, FlatList, Text, View } from 'react-native'
 
-interface MusicFile {
-	id: string
-	uri: string
-	filename: string
-	duration: number
-}
-
-const SongsScreen = () => {
+const SongsScreen: React.FC = () => {
 	const [hasPermission, setHasPermission] = useState<boolean>(false)
 	const [musicFiles, setMusicFiles] = useState<MusicFile[]>([])
+	const [isLoading, setIsLoading] = useState<boolean>(true)
+	const [endCursor, setEndCursor] = useState<string | undefined>(undefined)
+	const [hasNextPage, setHasNextPage] = useState<boolean>(true)
+
+	const loadMusicFiles = useCallback(async () => {
+		if (!hasPermission) return
+
+		setIsLoading(true)
+		try {
+			const result = await fetchMusicFiles(endCursor)
+			setMusicFiles((prevFiles) => [...prevFiles, ...result.musicFiles])
+			setEndCursor(result.endCursor)
+			setHasNextPage(result.hasNextPage)
+		} catch (error) {
+			console.error('Error fetching music files:', error)
+		} finally {
+			setIsLoading(false)
+		}
+	}, [hasPermission, endCursor])
 
 	useEffect(() => {
 		;(async () => {
 			const permission = await MediaLibrary.requestPermissionsAsync()
-			if (permission.status === 'granted') {
-				setHasPermission(true)
-				const songs = await fetchMusicFiles(hasPermission)
-				setMusicFiles(songs)
-			}
+			setHasPermission(permission.status === 'granted')
 		})()
-	}, [hasPermission])
+	}, [])
+
+	useEffect(() => {
+		if (hasPermission) {
+			loadMusicFiles()
+		}
+	}, [hasPermission, loadMusicFiles])
+
+	const renderItem = ({ item }: { item: MusicFile }) => (
+		<Text style={styles.fileName}>{item.filename}</Text>
+	)
+
+	const keyExtractor = (item: MusicFile) => item.id
+
+	const handleLoadMore = () => {
+		if (!isLoading && hasNextPage) {
+			loadMusicFiles()
+		}
+	}
+
+	if (!hasPermission) {
+		return (
+			<View style={defaultStyles.container}>
+				<Text style={styles.fileName}>Permission not granted</Text>
+			</View>
+		)
+	}
+
 	return (
 		<View style={defaultStyles.container}>
-			{/* Render music files here */}
-			<View style={{ marginTop: 100 }}>
-				{musicFiles?.map((file) => (
-					<Text style={styles.fileName} key={file.id}>
-						{file.filename}
-					</Text>
-				))}
-			</View>
+			<FlatList
+				data={musicFiles}
+				renderItem={renderItem}
+				keyExtractor={keyExtractor}
+				onEndReached={handleLoadMore}
+				onEndReachedThreshold={0.1}
+				ListFooterComponent={() =>
+					isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null
+				}
+			/>
 		</View>
 	)
 }
 
-export default SongsScreen
-
 const styles = {
 	fileName: {
 		fontSize: 14,
-		fontWeight: 'bold',
+		fontWeight: 'bold' as const,
 		marginTop: 10,
 		color: 'white',
 	},
 }
+
+export default SongsScreen
