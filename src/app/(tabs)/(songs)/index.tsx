@@ -1,4 +1,6 @@
 // src/screens/SongsScreen.tsx
+import { TracksListItem } from '@/components/TrackListItem'
+import TracksList from '@/components/TracksList'
 import { defaultStyles } from '@/styles'
 import React from 'react'
 import { Text, View } from 'react-native'
@@ -13,6 +15,8 @@ const SongsScreen = () => {
 				}}
 			>
 				Songs
+				<TracksListItem />
+				<TracksList />
 			</Text>
 		</View>
 	)

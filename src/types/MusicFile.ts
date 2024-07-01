@@ -1,6 +1,10 @@
 export interface MusicFile {
 	id: string
-	uri: string
-	filename: string
+	title: string
+	artist: string
 	duration: number
+	genre: string
+	url: string
+	cover: string // Path to the album art
+	filename: string
 }
