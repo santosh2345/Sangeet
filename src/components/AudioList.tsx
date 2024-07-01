@@ -6,12 +6,7 @@ import { memo, useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import fetchMusicFiles from './getSongs'
 
-interface MusicFile {
-	id: string
-	uri: string
-	filename: string
-	duration: number
-}
+
 
 const MusicItem = memo(
 	({
