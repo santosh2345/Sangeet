@@ -14,6 +14,7 @@ const AUDIO_EXTENSIONS = ['.mp3', '.wav', '.flac', '.m4a']
 export const Tlist = () => {
 	const [songs, setSongs] = useState<Track[]>([])
 
+	// Requests permission to read external storage from the user
 	const requestExternalStoragePermission = useCallback(async () => {
 		const readPermission = PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO
 		try {
@@ -25,16 +26,19 @@ export const Tlist = () => {
 		}
 	}, [])
 
+	// // Fetches all music files from the device
 	const handleReadDir = useCallback(
 		async (path: string) => {
 			if (!(await requestExternalStoragePermission())) return
 
 			try {
+				// Read the directory and filter out audio files
 				const result = await RNFS.readDir(path)
 				const audioFiles = result.filter(
 					(file) => file.isFile() && AUDIO_EXTENSIONS.some((ext) => file.name.endsWith(ext)),
 				)
 
+				// Add the audio files to the state as tracks
 				const newSongs = audioFiles.map((file) => ({
 					id: file.path,
 					name: file.name,
@@ -43,6 +47,7 @@ export const Tlist = () => {
 
 				setSongs((prevSongs) => [...prevSongs, ...newSongs])
 
+				// Recursively read directories to find audio files
 				const directories = result.filter((file) => file.isDirectory())
 				await Promise.all(directories.map((directory) => handleReadDir(directory.path)))
 			} catch (error) {
@@ -56,6 +61,7 @@ export const Tlist = () => {
 		handleReadDir(RNFS.ExternalStorageDirectoryPath)
 	}, [handleReadDir])
 
+	// // Fetches all music files from the device
 	const renderItem = useCallback(
 		({ item }: { item: Track }) => <Text style={styles.fileName}>{item.name}</Text>,
 
