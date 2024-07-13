@@ -75,6 +75,7 @@ export const Tlist = () => {
 	)
 }
 
+// Styles for the component
 const styles = StyleSheet.create({
 	fileName: {
 		fontSize: 14,
