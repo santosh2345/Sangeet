@@ -2,7 +2,7 @@ import { defaultStyles } from '@/styles'
 import { MusicFile } from '@/types/MusicFile'
 import { fetchMusicFiles } from '@/utils/FetchMusicFiles'
 import { useCallback, useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import { FlatList, Text, View } from 'react-native'
 
 import * as MediaLibrary from 'expo-media-library'
 
@@ -48,15 +48,12 @@ const TracksList = () => {
 			</View>
 		)
 	}
-}
 
-const styles = {
-	fileName: {
-		fontSize: 14,
-		fontWeight: 'bold' as const,
-		marginTop: 10,
-		color: 'white',
-	},
+	return (
+		<View style={defaultStyles.container}>
+			<FlatList data={musicFiles} renderItem={renderItem} keyExtractor={keyExtractor} />
+		</View>
+	)
 }
 
 export default TracksList
