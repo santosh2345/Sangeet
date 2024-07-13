@@ -56,4 +56,11 @@ const TracksList = () => {
 	)
 }
 
-export default TracksList
+const styles = {
+	fileName: {
+		fontSize: 14,
+		fontWeight: 'bold' as const,
+		marginTop: 10,
+		color: 'white',
+	},
+}export default TracksList
