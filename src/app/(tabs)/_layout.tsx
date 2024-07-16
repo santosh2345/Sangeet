@@ -59,6 +59,7 @@ const TabsNavigation = () => {
 					),
 				}}
 			/>
+			
 			<Tabs.Screen
 				name="artists"
 				options={{
