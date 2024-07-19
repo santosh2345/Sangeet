@@ -11,7 +11,18 @@ const TracksList = () => {
 	const [musicFiles, setMusicFiles] = useState<MusicFile[]>([])
 
 
-	
+	// Fetches all music files from the device
+	const loadMusicFiles = useCallback(async () => {
+		if (!hasPermission) return
+
+		try {
+			const result = await fetchMusicFiles()
+			setMusicFiles(result.musicFiles)
+		} catch (error) {
+			console.error('Error fetching music files:', error)
+		} finally {
+		}
+	}, [hasPermission])
 
 	useEffect(() => {
 		;(async () => {
