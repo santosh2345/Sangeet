@@ -1,7 +1,6 @@
 import { defaultStyles } from '@/styles'
 import { MusicFile } from '@/types/MusicFile'
-import { fetchMusicFiles } from '@/utils/FetchMusicFiles'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FlatList, Text, View } from 'react-native'
 
 import * as MediaLibrary from 'expo-media-library'
@@ -12,18 +11,7 @@ const TracksList = () => {
 	const [musicFiles, setMusicFiles] = useState<MusicFile[]>([])
 
 
-	// Fetches all music files from the device
-	const loadMusicFiles = useCallback(async () => {
-		if (!hasPermission) return
-
-		try {
-			const result = await fetchMusicFiles()
-			setMusicFiles(result.musicFiles)
-		} catch (error) {
-			console.error('Error fetching music files:', error)
-		} finally {
-		}
-	}, [hasPermission])
+	
 
 	useEffect(() => {
 		;(async () => {
