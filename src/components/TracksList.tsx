@@ -1,6 +1,6 @@
 import { defaultStyles } from '@/styles'
 import { MusicFile } from '@/types/MusicFile'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FlatList, Text, View } from 'react-native'
 
 import * as MediaLibrary from 'expo-media-library'
